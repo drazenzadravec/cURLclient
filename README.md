@@ -4,5 +4,5 @@ cURL c++ client wrapper
 
 #### cURL
 
-[![cURL Website](https://curl.se/logo/curl-white-symbol.svg)](https://curl.se/)
-[![cURL Source code](https://curl.se/logo/curl-white-symbol.svg)](https://github.com/curl/curl)
+<a href="https://curl.se/" target="_blank">cURL Website</a>
+<a href="https://github.com/curl/curl" target="_blank">cURL Source code</a>
