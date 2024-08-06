@@ -82,7 +82,7 @@ void CurlClient::SetVerifyCommonName(bool checkExistence, bool verifyCommonName)
 /// <param name="responseBody">The response body</param>
 /// <param name="responseHeaders">The response headers</param>
 /// <returns>true if success: else false</returns>
-bool CurlClient::Options(const std::string& url, std::string* responseBody, std::string* responseHeaders)
+bool CurlClient::Options(const std::string& url, std::string* responseBody, std::string* responseHeaders) const
 {
 	bool result = false;
 	CURL* curl;
@@ -91,7 +91,7 @@ bool CurlClient::Options(const std::string& url, std::string* responseBody, std:
 	std::string readHeaders;
 
 	// the url
-	auto const url_request = url;
+	auto const& url_request = url;
 
 	// make request.
 	curl = curl_easy_init();
@@ -171,7 +171,7 @@ bool CurlClient::Options(const std::string& url, std::string* responseBody, std:
 /// <param name="responseHeaders">The response headers</param>
 /// <returns>true if success: else false</returns>
 bool CurlClient::Options(const std::string& url, const std::map<std::string, std::string>& requestHeaders,
-	std::string* responseBody, std::string* responseHeaders)
+	std::string* responseBody, std::string* responseHeaders) const
 {
 	bool result = false;
 	CURL* curl;
@@ -180,7 +180,7 @@ bool CurlClient::Options(const std::string& url, const std::map<std::string, std
 	std::string readHeaders;
 
 	// the url
-	auto const url_request = url;
+	auto const& url_request = url;
 	struct curl_slist* headers = NULL;
 
 	curl = curl_easy_init();
@@ -225,7 +225,7 @@ bool CurlClient::Options(const std::string& url, const std::map<std::string, std
 		curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "OPTIONS");
 
 		// for each request header.
-		for (auto header : requestHeaders)
+		for (const auto& header : requestHeaders)
 		{
 			// create header name and value.
 			std::string headerName(header.first);
@@ -274,7 +274,7 @@ bool CurlClient::Options(const std::string& url, const std::map<std::string, std
 /// <param name="url">the URL</param>
 /// <param name="responseHeaders">The response headers</param>
 /// <returns>true if success: else false</returns>
-bool CurlClient::Head(const std::string& url, std::string* responseHeaders)
+bool CurlClient::Head(const std::string& url, std::string* responseHeaders) const
 {
 	bool result = false;
 	CURL* curl;
@@ -283,7 +283,7 @@ bool CurlClient::Head(const std::string& url, std::string* responseHeaders)
 	std::string readHeaders;
 
 	// the url
-	auto const url_request = url;
+	auto const& url_request = url;
 
 	// make request.
 	curl = curl_easy_init();
@@ -360,7 +360,7 @@ bool CurlClient::Head(const std::string& url, std::string* responseHeaders)
 /// <param name="requestHeaders">the request headers</param>
 /// <param name="responseHeaders">The response headers</param>
 /// <returns>true if success: else false</returns>
-bool CurlClient::Head(const std::string& url, const std::map<std::string, std::string>& requestHeaders, std::string* responseHeaders)
+bool CurlClient::Head(const std::string& url, const std::map<std::string, std::string>& requestHeaders, std::string* responseHeaders) const
 {
 	bool result = false;
 	CURL* curl;
@@ -369,7 +369,7 @@ bool CurlClient::Head(const std::string& url, const std::map<std::string, std::s
 	std::string readHeaders;
 
 	// the url
-	auto const url_request = url;
+	auto const& url_request = url;
 	struct curl_slist* headers = NULL;
 
 	curl = curl_easy_init();
@@ -412,7 +412,7 @@ bool CurlClient::Head(const std::string& url, const std::map<std::string, std::s
 		}
 
 		// for each request header.
-		for (auto header : requestHeaders)
+		for (const auto& header : requestHeaders)
 		{
 			// create header name and value.
 			std::string headerName(header.first);
@@ -461,7 +461,7 @@ bool CurlClient::Head(const std::string& url, const std::map<std::string, std::s
 /// <param name="responseBody">The response body</param>
 /// <param name="responseHeaders">The response headers</param>
 /// <returns>true if success: else false</returns>
-bool CurlClient::Get(const std::string& url, std::string* responseBody, std::string* responseHeaders)
+bool CurlClient::Get(const std::string& url, std::string* responseBody, std::string* responseHeaders) const
 {
 	bool result = false;
 	CURL* curl;
@@ -470,7 +470,7 @@ bool CurlClient::Get(const std::string& url, std::string* responseBody, std::str
 	std::string readHeaders;
 
 	// the url
-	auto const url_request = url;
+	auto const& url_request = url;
 
 	// make request.
 	curl = curl_easy_init();
@@ -548,7 +548,7 @@ bool CurlClient::Get(const std::string& url, std::string* responseBody, std::str
 /// <param name="responseHeaders">The response headers</param>
 /// <returns>true if success: else false</returns>
 bool CurlClient::Get(const std::string& url, const std::map<std::string, std::string>& requestHeaders,
-	std::string* responseBody, std::string* responseHeaders)
+	std::string* responseBody, std::string* responseHeaders) const
 {
 	bool result = false;
 	CURL* curl;
@@ -557,7 +557,7 @@ bool CurlClient::Get(const std::string& url, const std::map<std::string, std::st
 	std::string readHeaders;
 
 	// the url
-	auto const url_request = url;
+	auto const& url_request = url;
 	struct curl_slist* headers = NULL;
 
 	curl = curl_easy_init();
@@ -600,7 +600,7 @@ bool CurlClient::Get(const std::string& url, const std::map<std::string, std::st
 		}
 
 		// for each request header.
-		for (auto header : requestHeaders)
+		for (const auto& header : requestHeaders)
 		{
 			// create header name and value.
 			std::string headerName(header.first);
@@ -652,7 +652,7 @@ bool CurlClient::Get(const std::string& url, const std::map<std::string, std::st
 /// <param name="responseHeaders">The response headers</param>
 /// <returns>true if success: else false</returns>
 bool CurlClient::Post(const std::string& url, const std::string& requestBody, const std::string& requestContentType,
-	std::string* responseBody, std::string* responseHeaders)
+	std::string* responseBody, std::string* responseHeaders) const
 {
 	bool result = false;
 	CURL* curl;
@@ -661,10 +661,10 @@ bool CurlClient::Post(const std::string& url, const std::string& requestBody, co
 	std::string readHeaders;
 
 	// the url
-	auto const url_request = url;
+	auto const& url_request = url;
 	struct curl_slist* headers = NULL;
 
-	auto body_request = requestBody;
+	auto& body_request = requestBody;
 	std::string body_content_type = "Content-Type: " + requestContentType;
 
 	curl = curl_easy_init();
@@ -760,7 +760,7 @@ bool CurlClient::Post(const std::string& url, const std::string& requestBody, co
 /// <param name="responseHeaders">The response headers</param>
 /// <returns>true if success: else false</returns>
 bool CurlClient::Post(const std::string& url, const std::string& requestBody, const std::string& requestContentType,
-	const std::map<std::string, std::string>& requestHeaders, std::string* responseBody, std::string* responseHeaders)
+	const std::map<std::string, std::string>& requestHeaders, std::string* responseBody, std::string* responseHeaders) const
 {
 	bool result = false;
 	CURL* curl;
@@ -769,10 +769,10 @@ bool CurlClient::Post(const std::string& url, const std::string& requestBody, co
 	std::string readHeaders;
 
 	// the url
-	auto const url_request = url;
+	auto const& url_request = url;
 	struct curl_slist* headers = NULL;
 
-	auto body_request = requestBody;
+	auto& body_request = requestBody;
 	std::string body_content_type = "Content-Type: " + requestContentType;
 
 	curl = curl_easy_init();
@@ -820,7 +820,7 @@ bool CurlClient::Post(const std::string& url, const std::string& requestBody, co
 		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, body_request.c_str());
 
 		// for each request header.
-		for (auto header : requestHeaders)
+		for (const auto& header : requestHeaders)
 		{
 			// create header name and value.
 			std::string headerName(header.first);
@@ -876,7 +876,7 @@ bool CurlClient::Post(const std::string& url, const std::string& requestBody, co
 /// <param name="responseBody">The response body</param>
 /// <param name="responseHeaders">The response headers</param>
 /// <returns>true if success: else false</returns>
-bool CurlClient::Put(const std::string& url, std::string* responseBody, std::string* responseHeaders)
+bool CurlClient::Put(const std::string& url, std::string* responseBody, std::string* responseHeaders) const
 {
 	bool result = false;
 	CURL* curl;
@@ -885,7 +885,7 @@ bool CurlClient::Put(const std::string& url, std::string* responseBody, std::str
 	std::string readHeaders;
 
 	// the url
-	auto const url_request = url;
+	auto const& url_request = url;
 
 	// make request.
 	curl = curl_easy_init();
@@ -964,7 +964,8 @@ bool CurlClient::Put(const std::string& url, std::string* responseBody, std::str
 /// <param name="responseBody">The response body</param>
 /// <param name="responseHeaders">The response headers</param>
 /// <returns>true if success: else false</returns>
-bool CurlClient::Put(const std::string& url, const std::map<std::string, std::string>& requestHeaders, std::string* responseBody, std::string* responseHeaders)
+bool CurlClient::Put(const std::string& url, const std::map<std::string,
+	std::string>& requestHeaders, std::string* responseBody, std::string* responseHeaders) const
 {
 	bool result = false;
 	CURL* curl;
@@ -973,7 +974,7 @@ bool CurlClient::Put(const std::string& url, const std::map<std::string, std::st
 	std::string readHeaders;
 
 	// the url
-	auto const url_request = url;
+	auto const& url_request = url;
 	struct curl_slist* headers = NULL;
 
 	curl = curl_easy_init();
@@ -1018,7 +1019,7 @@ bool CurlClient::Put(const std::string& url, const std::map<std::string, std::st
 		curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "PUT");
 
 		// for each request header.
-		for (auto header : requestHeaders)
+		for (const auto& header : requestHeaders)
 		{
 			// create header name and value.
 			std::string headerName(header.first);
@@ -1070,7 +1071,7 @@ bool CurlClient::Put(const std::string& url, const std::map<std::string, std::st
 /// <param name="responseHeaders">The response headers</param>
 /// <returns>true if success: else false</returns>
 bool CurlClient::Put(const std::string& url, const std::string& requestBody, const std::string& requestContentType,
-	std::string* responseBody, std::string* responseHeaders)
+	std::string* responseBody, std::string* responseHeaders) const
 {
 	bool result = false;
 	CURL* curl;
@@ -1079,10 +1080,10 @@ bool CurlClient::Put(const std::string& url, const std::string& requestBody, con
 	std::string readHeaders;
 
 	// the url
-	auto const url_request = url;
+	auto const& url_request = url;
 	struct curl_slist* headers = NULL;
 
-	auto body_request = requestBody;
+	auto& body_request = requestBody;
 	std::string body_content_type = "Content-Type: " + requestContentType;
 
 	curl = curl_easy_init();
@@ -1179,7 +1180,7 @@ bool CurlClient::Put(const std::string& url, const std::string& requestBody, con
 /// <param name="responseHeaders">The response headers</param>
 /// <returns>true if success: else false</returns>
 bool CurlClient::Put(const std::string& url, const std::string& requestBody, const std::string& requestContentType,
-	const std::map<std::string, std::string>& requestHeaders, std::string* responseBody, std::string* responseHeaders)
+	const std::map<std::string, std::string>& requestHeaders, std::string* responseBody, std::string* responseHeaders) const
 {
 	bool result = false;
 	CURL* curl;
@@ -1188,10 +1189,10 @@ bool CurlClient::Put(const std::string& url, const std::string& requestBody, con
 	std::string readHeaders;
 
 	// the url
-	auto const url_request = url;
+	auto const& url_request = url;
 	struct curl_slist* headers = NULL;
 
-	auto body_request = requestBody;
+	auto& body_request = requestBody;
 	std::string body_content_type = "Content-Type: " + requestContentType;
 
 	curl = curl_easy_init();
@@ -1240,7 +1241,7 @@ bool CurlClient::Put(const std::string& url, const std::string& requestBody, con
 		curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "PUT");
 
 		// for each request header.
-		for (auto header : requestHeaders)
+		for (const auto& header : requestHeaders)
 		{
 			// create header name and value.
 			std::string headerName(header.first);
@@ -1296,7 +1297,7 @@ bool CurlClient::Put(const std::string& url, const std::string& requestBody, con
 /// <param name="responseBody">The response body</param>
 /// <param name="responseHeaders">The response headers</param>
 /// <returns>true if success: else false</returns>
-bool CurlClient::Delete(const std::string& url, std::string* responseBody, std::string* responseHeaders)
+bool CurlClient::Delete(const std::string& url, std::string* responseBody, std::string* responseHeaders) const
 {
 	bool result = false;
 	CURL* curl;
@@ -1305,7 +1306,7 @@ bool CurlClient::Delete(const std::string& url, std::string* responseBody, std::
 	std::string readHeaders;
 
 	// the url
-	auto const url_request = url;
+	auto const& url_request = url;
 
 	// make request.
 	curl = curl_easy_init();
@@ -1384,7 +1385,8 @@ bool CurlClient::Delete(const std::string& url, std::string* responseBody, std::
 /// <param name="responseBody">The response body</param>
 /// <param name="responseHeaders">The response headers</param>
 /// <returns>true if success: else false</returns>
-bool CurlClient::Delete(const std::string& url, const std::map<std::string, std::string>& requestHeaders, std::string* responseBody, std::string* responseHeaders)
+bool CurlClient::Delete(const std::string& url, const std::map<std::string,
+	std::string>& requestHeaders, std::string* responseBody, std::string* responseHeaders) const
 {
 	bool result = false;
 	CURL* curl;
@@ -1393,7 +1395,7 @@ bool CurlClient::Delete(const std::string& url, const std::map<std::string, std:
 	std::string readHeaders;
 
 	// the url
-	auto const url_request = url;
+	auto const& url_request = url;
 	struct curl_slist* headers = NULL;
 
 	curl = curl_easy_init();
@@ -1438,7 +1440,7 @@ bool CurlClient::Delete(const std::string& url, const std::map<std::string, std:
 		curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "DELETE");
 
 		// for each request header.
-		for (auto header : requestHeaders)
+		for (const auto& header : requestHeaders)
 		{
 			// create header name and value.
 			std::string headerName(header.first);
@@ -1490,7 +1492,7 @@ bool CurlClient::Delete(const std::string& url, const std::map<std::string, std:
 /// <param name="responseHeaders">The response headers</param>
 /// <returns>true if success: else false</returns>
 bool CurlClient::Delete(const std::string& url, const std::string& requestBody, const std::string& requestContentType,
-	std::string* responseBody, std::string* responseHeaders)
+	std::string* responseBody, std::string* responseHeaders) const
 {
 	bool result = false;
 	CURL* curl;
@@ -1499,10 +1501,10 @@ bool CurlClient::Delete(const std::string& url, const std::string& requestBody, 
 	std::string readHeaders;
 
 	// the url
-	auto const url_request = url;
+	auto const& url_request = url;
 	struct curl_slist* headers = NULL;
 
-	auto body_request = requestBody;
+	auto& body_request = requestBody;
 	std::string body_content_type = "Content-Type: " + requestContentType;
 
 	curl = curl_easy_init();
@@ -1599,7 +1601,7 @@ bool CurlClient::Delete(const std::string& url, const std::string& requestBody, 
 /// <param name="responseHeaders">The response headers</param>
 /// <returns>true if success: else false</returns>
 bool CurlClient::Delete(const std::string& url, const std::string& requestBody, const std::string& requestContentType,
-	const std::map<std::string, std::string>& requestHeaders, std::string* responseBody, std::string* responseHeaders)
+	const std::map<std::string, std::string>& requestHeaders, std::string* responseBody, std::string* responseHeaders) const
 {
 	bool result = false;
 	CURL* curl;
@@ -1608,10 +1610,10 @@ bool CurlClient::Delete(const std::string& url, const std::string& requestBody, 
 	std::string readHeaders;
 
 	// the url
-	auto const url_request = url;
+	auto const& url_request = url;
 	struct curl_slist* headers = NULL;
 
-	auto body_request = requestBody;
+	auto& body_request = requestBody;
 	std::string body_content_type = "Content-Type: " + requestContentType;
 
 	curl = curl_easy_init();
@@ -1660,7 +1662,7 @@ bool CurlClient::Delete(const std::string& url, const std::string& requestBody, 
 		curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "DELETE");
 
 		// for each request header.
-		for (auto header : requestHeaders)
+		for (const auto& header : requestHeaders)
 		{
 			// create header name and value.
 			std::string headerName(header.first);
@@ -1716,7 +1718,7 @@ bool CurlClient::Delete(const std::string& url, const std::string& requestBody, 
 /// <param name="responseBody">The response body</param>
 /// <param name="responseHeaders">The response headers</param>
 /// <returns>true if success: else false</returns>
-bool CurlClient::Patch(const std::string& url, std::string* responseBody, std::string* responseHeaders)
+bool CurlClient::Patch(const std::string& url, std::string* responseBody, std::string* responseHeaders) const
 {
 	bool result = false;
 	CURL* curl;
@@ -1725,7 +1727,7 @@ bool CurlClient::Patch(const std::string& url, std::string* responseBody, std::s
 	std::string readHeaders;
 
 	// the url
-	auto const url_request = url;
+	auto const& url_request = url;
 
 	// make request.
 	curl = curl_easy_init();
@@ -1804,7 +1806,8 @@ bool CurlClient::Patch(const std::string& url, std::string* responseBody, std::s
 /// <param name="responseBody">The response body</param>
 /// <param name="responseHeaders">The response headers</param>
 /// <returns>true if success: else false</returns>
-bool CurlClient::Patch(const std::string& url, const std::map<std::string, std::string>& requestHeaders, std::string* responseBody, std::string* responseHeaders)
+bool CurlClient::Patch(const std::string& url, const std::map<std::string, std::string>& requestHeaders,
+	std::string* responseBody, std::string* responseHeaders) const
 {
 	bool result = false;
 	CURL* curl;
@@ -1813,7 +1816,7 @@ bool CurlClient::Patch(const std::string& url, const std::map<std::string, std::
 	std::string readHeaders;
 
 	// the url
-	auto const url_request = url;
+	auto const& url_request = url;
 	struct curl_slist* headers = NULL;
 
 	curl = curl_easy_init();
@@ -1858,7 +1861,7 @@ bool CurlClient::Patch(const std::string& url, const std::map<std::string, std::
 		curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "PATCH");
 
 		// for each request header.
-		for (auto header : requestHeaders)
+		for (const auto& header : requestHeaders)
 		{
 			// create header name and value.
 			std::string headerName(header.first);
@@ -1910,7 +1913,7 @@ bool CurlClient::Patch(const std::string& url, const std::map<std::string, std::
 /// <param name="responseHeaders">The response headers</param>
 /// <returns>true if success: else false</returns>
 bool CurlClient::Patch(const std::string& url, const std::string& requestBody, const std::string& requestContentType,
-	std::string* responseBody, std::string* responseHeaders)
+	std::string* responseBody, std::string* responseHeaders) const
 {
 	bool result = false;
 	CURL* curl;
@@ -1919,10 +1922,10 @@ bool CurlClient::Patch(const std::string& url, const std::string& requestBody, c
 	std::string readHeaders;
 
 	// the url
-	auto const url_request = url;
+	auto const& url_request = url;
 	struct curl_slist* headers = NULL;
 
-	auto body_request = requestBody;
+	auto& body_request = requestBody;
 	std::string body_content_type = "Content-Type: " + requestContentType;
 
 	curl = curl_easy_init();
@@ -2019,7 +2022,7 @@ bool CurlClient::Patch(const std::string& url, const std::string& requestBody, c
 /// <param name="responseHeaders">The response headers</param>
 /// <returns>true if success: else false</returns>
 bool CurlClient::Patch(const std::string& url, const std::string& requestBody, const std::string& requestContentType,
-	const std::map<std::string, std::string>& requestHeaders, std::string* responseBody, std::string* responseHeaders)
+	const std::map<std::string, std::string>& requestHeaders, std::string* responseBody, std::string* responseHeaders) const
 {
 	bool result = false;
 	CURL* curl;
@@ -2028,10 +2031,10 @@ bool CurlClient::Patch(const std::string& url, const std::string& requestBody, c
 	std::string readHeaders;
 
 	// the url
-	auto const url_request = url;
+	auto const& url_request = url;
 	struct curl_slist* headers = NULL;
 
-	auto body_request = requestBody;
+	auto& body_request = requestBody;
 	std::string body_content_type = "Content-Type: " + requestContentType;
 
 	curl = curl_easy_init();
@@ -2080,7 +2083,7 @@ bool CurlClient::Patch(const std::string& url, const std::string& requestBody, c
 		curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "PATCH");
 
 		// for each request header.
-		for (auto header : requestHeaders)
+		for (const auto& header : requestHeaders)
 		{
 			// create header name and value.
 			std::string headerName(header.first);
