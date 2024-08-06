@@ -1,6 +1,6 @@
 # cURL HTTP client
 
-cURL C++ client wrapper
+cURL C++ HTTP client wrapper, includes request methods for GET, POST, HEAD, OPTIONS, PUT, DELETE, PATCH
 
 #### cURL
 
