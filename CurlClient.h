@@ -58,7 +58,7 @@ namespace Nequeo {
 			///		request headers:
 			///			map:	'Authorization: ', 'Bearer: token'
 			/// </example>
-			bool Options(const std::string& url, std::map<std::string, std::string> requestHeaders,
+			bool Options(const std::string& url, const std::map<std::string, std::string>& requestHeaders,
 				std::string* responseBody, std::string* responseHeaders);
 
 			/// <summary>
@@ -80,7 +80,7 @@ namespace Nequeo {
 			///		request headers:
 			///			map:	'Authorization: ', 'Bearer: token'
 			/// </example>
-			bool Head(const std::string& url, std::map<std::string, std::string> requestHeaders, std::string* responseHeaders);
+			bool Head(const std::string& url, const std::map<std::string, std::string>& requestHeaders, std::string* responseHeaders);
 
 			/// <summary>
 			/// make get request.
@@ -103,7 +103,7 @@ namespace Nequeo {
 			///		request headers:
 			///			map:	'Authorization: ', 'Bearer: token'
 			/// </example>
-			bool Get(const std::string& url, std::map<std::string, std::string> requestHeaders, std::string* responseBody, std::string* responseHeaders);
+			bool Get(const std::string& url, const std::map<std::string, std::string>& requestHeaders, std::string* responseBody, std::string* responseHeaders);
 
 			/// <summary>
 			/// make post request
@@ -132,7 +132,7 @@ namespace Nequeo {
 			///			map:	'Authorization: ', 'Bearer: token'
 			/// </example>
 			bool Post(const std::string& url, const std::string& requestBody, const std::string& requestContentType,
-				std::map<std::string, std::string> requestHeaders, std::string* responseBody, std::string* responseHeaders);
+				const std::map<std::string, std::string>& requestHeaders, std::string* responseBody, std::string* responseHeaders);
 
 			/// <summary>
 			/// make put request.
@@ -155,7 +155,7 @@ namespace Nequeo {
 			///		request headers:
 			///			map:	'Authorization: ', 'Bearer: token'
 			/// </example>
-			bool Put(const std::string& url, std::map<std::string, std::string> requestHeaders, std::string* responseBody, std::string* responseHeaders);
+			bool Put(const std::string& url, const std::map<std::string, std::string>& requestHeaders, std::string* responseBody, std::string* responseHeaders);
 
 			/// <summary>
 			/// make put request
@@ -184,7 +184,7 @@ namespace Nequeo {
 			///			map:	'Authorization: ', 'Bearer: token'
 			/// </example>
 			bool Put(const std::string& url, const std::string& requestBody, const std::string& requestContentType,
-				std::map<std::string, std::string> requestHeaders, std::string* responseBody, std::string* responseHeaders);
+				const std::map<std::string, std::string>& requestHeaders, std::string* responseBody, std::string* responseHeaders);
 
 			/// <summary>
 			/// make delete request.
@@ -207,7 +207,7 @@ namespace Nequeo {
 			///		request headers:
 			///			map:	'Authorization: ', 'Bearer: token'
 			/// </example>
-			bool Delete(const std::string& url, std::map<std::string, std::string> requestHeaders, std::string* responseBody, std::string* responseHeaders);
+			bool Delete(const std::string& url, const std::map<std::string, std::string>& requestHeaders, std::string* responseBody, std::string* responseHeaders);
 
 			/// <summary>
 			/// make delete request
@@ -236,7 +236,7 @@ namespace Nequeo {
 			///			map:	'Authorization: ', 'Bearer: token'
 			/// </example>
 			bool Delete(const std::string& url, const std::string& requestBody, const std::string& requestContentType,
-				std::map<std::string, std::string> requestHeaders, std::string* responseBody, std::string* responseHeaders);
+				const std::map<std::string, std::string>& requestHeaders, std::string* responseBody, std::string* responseHeaders);
 
 			/// <summary>
 			/// make patch request.
@@ -259,7 +259,7 @@ namespace Nequeo {
 			///		request headers:
 			///			map:	'Authorization: ', 'Bearer: token'
 			/// </example>
-			bool Patch(const std::string& url, std::map<std::string, std::string> requestHeaders, std::string* responseBody, std::string* responseHeaders);
+			bool Patch(const std::string& url, const std::map<std::string, std::string>& requestHeaders, std::string* responseBody, std::string* responseHeaders);
 
 			/// <summary>
 			/// make patch request
@@ -288,7 +288,7 @@ namespace Nequeo {
 			///			map:	'Authorization: ', 'Bearer: token'
 			/// </example>
 			bool Patch(const std::string& url, const std::string& requestBody, const std::string& requestContentType,
-				std::map<std::string, std::string> requestHeaders, std::string* responseBody, std::string* responseHeaders);
+				const std::map<std::string, std::string>& requestHeaders, std::string* responseBody, std::string* responseHeaders);
 
 		private:
 			bool _disposed;

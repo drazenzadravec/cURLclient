@@ -9,11 +9,11 @@ using namespace Nequeo::Net;
 /// <summary>
 /// Write Callback
 /// </summary>
-/// <param name="contents"></param>
-/// <param name="size"></param>
-/// <param name="nmemb"></param>
-/// <param name="data"></param>
-/// <returns></returns>
+/// <param name="contents">the contents</param>
+/// <param name="size">the size</param>
+/// <param name="nmemb">the size</param>
+/// <param name="data">the data</param>
+/// <returns>the data size</returns>
 static size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* data)
 {
 	((std::string*)data)->append((char*)contents, size * nmemb);
@@ -23,11 +23,11 @@ static size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* dat
 /// <summary>
 /// Write Header Callback
 /// </summary>
-/// <param name="contents"></param>
-/// <param name="size"></param>
-/// <param name="nmemb"></param>
-/// <param name="data"></param>
-/// <returns></returns>
+/// <param name="contents">the contents</param>
+/// <param name="size">the size</param>
+/// <param name="nmemb">the size</param>
+/// <param name="data">the data</param>
+/// <returns>the data size</returns>
 static size_t WriteHeaderCallback(char* contents, size_t size, size_t nmemb, void* data)
 {
 	((std::string*)data)->append((char*)contents, size * nmemb);
@@ -170,7 +170,7 @@ bool CurlClient::Options(const std::string& url, std::string* responseBody, std:
 /// <param name="responseBody">The response body</param>
 /// <param name="responseHeaders">The response headers</param>
 /// <returns>true if success: else false</returns>
-bool CurlClient::Options(const std::string& url, std::map<std::string, std::string> requestHeaders,
+bool CurlClient::Options(const std::string& url, const std::map<std::string, std::string>& requestHeaders,
 	std::string* responseBody, std::string* responseHeaders)
 {
 	bool result = false;
@@ -267,6 +267,7 @@ bool CurlClient::Options(const std::string& url, std::map<std::string, std::stri
 	return result;
 }
 
+
 /// <summary>
 /// make head request.
 /// </summary>
@@ -359,7 +360,7 @@ bool CurlClient::Head(const std::string& url, std::string* responseHeaders)
 /// <param name="requestHeaders">the request headers</param>
 /// <param name="responseHeaders">The response headers</param>
 /// <returns>true if success: else false</returns>
-bool CurlClient::Head(const std::string& url, std::map<std::string, std::string> requestHeaders, std::string* responseHeaders)
+bool CurlClient::Head(const std::string& url, const std::map<std::string, std::string>& requestHeaders, std::string* responseHeaders)
 {
 	bool result = false;
 	CURL* curl;
@@ -546,7 +547,7 @@ bool CurlClient::Get(const std::string& url, std::string* responseBody, std::str
 /// <param name="responseBody">The response body</param>
 /// <param name="responseHeaders">The response headers</param>
 /// <returns>true if success: else false</returns>
-bool CurlClient::Get(const std::string& url, std::map<std::string, std::string> requestHeaders,
+bool CurlClient::Get(const std::string& url, const std::map<std::string, std::string>& requestHeaders,
 	std::string* responseBody, std::string* responseHeaders)
 {
 	bool result = false;
@@ -759,7 +760,7 @@ bool CurlClient::Post(const std::string& url, const std::string& requestBody, co
 /// <param name="responseHeaders">The response headers</param>
 /// <returns>true if success: else false</returns>
 bool CurlClient::Post(const std::string& url, const std::string& requestBody, const std::string& requestContentType,
-	std::map<std::string, std::string> requestHeaders, std::string* responseBody, std::string* responseHeaders)
+	const std::map<std::string, std::string>& requestHeaders, std::string* responseBody, std::string* responseHeaders)
 {
 	bool result = false;
 	CURL* curl;
@@ -963,7 +964,7 @@ bool CurlClient::Put(const std::string& url, std::string* responseBody, std::str
 /// <param name="responseBody">The response body</param>
 /// <param name="responseHeaders">The response headers</param>
 /// <returns>true if success: else false</returns>
-bool CurlClient::Put(const std::string& url, std::map<std::string, std::string> requestHeaders, std::string* responseBody, std::string* responseHeaders)
+bool CurlClient::Put(const std::string& url, const std::map<std::string, std::string>& requestHeaders, std::string* responseBody, std::string* responseHeaders)
 {
 	bool result = false;
 	CURL* curl;
@@ -1178,7 +1179,7 @@ bool CurlClient::Put(const std::string& url, const std::string& requestBody, con
 /// <param name="responseHeaders">The response headers</param>
 /// <returns>true if success: else false</returns>
 bool CurlClient::Put(const std::string& url, const std::string& requestBody, const std::string& requestContentType,
-	std::map<std::string, std::string> requestHeaders, std::string* responseBody, std::string* responseHeaders)
+	const std::map<std::string, std::string>& requestHeaders, std::string* responseBody, std::string* responseHeaders)
 {
 	bool result = false;
 	CURL* curl;
@@ -1383,7 +1384,7 @@ bool CurlClient::Delete(const std::string& url, std::string* responseBody, std::
 /// <param name="responseBody">The response body</param>
 /// <param name="responseHeaders">The response headers</param>
 /// <returns>true if success: else false</returns>
-bool CurlClient::Delete(const std::string& url, std::map<std::string, std::string> requestHeaders, std::string* responseBody, std::string* responseHeaders)
+bool CurlClient::Delete(const std::string& url, const std::map<std::string, std::string>& requestHeaders, std::string* responseBody, std::string* responseHeaders)
 {
 	bool result = false;
 	CURL* curl;
@@ -1598,7 +1599,7 @@ bool CurlClient::Delete(const std::string& url, const std::string& requestBody, 
 /// <param name="responseHeaders">The response headers</param>
 /// <returns>true if success: else false</returns>
 bool CurlClient::Delete(const std::string& url, const std::string& requestBody, const std::string& requestContentType,
-	std::map<std::string, std::string> requestHeaders, std::string* responseBody, std::string* responseHeaders)
+	const std::map<std::string, std::string>& requestHeaders, std::string* responseBody, std::string* responseHeaders)
 {
 	bool result = false;
 	CURL* curl;
@@ -1803,7 +1804,7 @@ bool CurlClient::Patch(const std::string& url, std::string* responseBody, std::s
 /// <param name="responseBody">The response body</param>
 /// <param name="responseHeaders">The response headers</param>
 /// <returns>true if success: else false</returns>
-bool CurlClient::Patch(const std::string& url, std::map<std::string, std::string> requestHeaders, std::string* responseBody, std::string* responseHeaders)
+bool CurlClient::Patch(const std::string& url, const std::map<std::string, std::string>& requestHeaders, std::string* responseBody, std::string* responseHeaders)
 {
 	bool result = false;
 	CURL* curl;
@@ -2018,7 +2019,7 @@ bool CurlClient::Patch(const std::string& url, const std::string& requestBody, c
 /// <param name="responseHeaders">The response headers</param>
 /// <returns>true if success: else false</returns>
 bool CurlClient::Patch(const std::string& url, const std::string& requestBody, const std::string& requestContentType,
-	std::map<std::string, std::string> requestHeaders, std::string* responseBody, std::string* responseHeaders)
+	const std::map<std::string, std::string>& requestHeaders, std::string* responseBody, std::string* responseHeaders)
 {
 	bool result = false;
 	CURL* curl;
