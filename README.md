@@ -1,4 +1,4 @@
-# cURLclient
+# cURL client
 
 cURL c++ client wrapper
 
