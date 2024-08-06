@@ -1,6 +1,6 @@
 # cURL client
 
-cURL c++ client wrapper
+cURL C++ client wrapper
 
 #### cURL
 
