@@ -1,6 +1,7 @@
 
 #include "pch.h"
 #include "CurlClient.h"
+#include "pch.cpp"
 
 #include <curl/curl.h>
 
@@ -543,6 +544,123 @@ bool CurlClient::Get(const std::string& url, std::string* responseBody, std::str
 /// make get request.
 /// </summary>
 /// <param name="url">the URL</param>
+/// <param name="responseBody">The response body</param>
+/// <param name="responseStatus">The response status</param>
+/// <param name="responseHeaders">The response headers</param>
+/// <returns>true if success: else false</returns>
+bool CurlClient::Get(const std::string& url, std::string* responseBody, std::string* responseStatus,
+	std::map<std::string, std::string>* responseHeaders) const
+{
+	bool result = false;
+	CURL* curl;
+	CURLcode res;
+	std::string readBuffer;
+	std::string readHeaders;
+
+	// the url
+	auto const& url_request = url;
+
+	// make request.
+	curl = curl_easy_init();
+	if (curl) {
+
+		// add curl options
+		curl_easy_setopt(curl, CURLOPT_URL, url_request.c_str());
+		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+		curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, WriteHeaderCallback);
+		curl_easy_setopt(curl, CURLOPT_WRITEHEADER, &readHeaders);
+		curl_easy_setopt(curl, CURLOPT_HTTP_VERSION, (long)CURL_HTTP_VERSION_2TLS);
+
+		// 1L to verify 0L to not verify.
+		// Set if we should verify the peer in ssl handshake, set 1 to verify.
+		if (_verify_peer)
+		{
+			curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 1L);
+		}
+		else
+		{
+			curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
+		}
+
+		// 1L to verify 0L to not verify.
+		// Set if we should verify the Common name from the peer certificate in ssl
+		// handshake, set 1 to check existence, 2 to ensure that it matches the
+		// provided hostname.
+		if (_verify_common_name)
+		{
+			curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 2L);
+		}
+		else if (_check_existence)
+		{
+			curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 1L);
+		}
+		else
+		{
+			curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
+		}
+
+		// make the request.
+		res = curl_easy_perform(curl);
+		if (res != CURLE_OK)
+		{
+			result = false;
+		}
+		else
+		{
+			result = true;
+		}
+
+		// clean up
+		curl_easy_cleanup(curl);
+
+		// assign result.
+		*responseBody = readBuffer;
+
+		std::string trimString(" ");
+		std::string splitHeadersString("\r\n");
+		std::string splitKeyValuesString(": ");
+
+		// split the response headers.
+		std::vector<std::string> resultHeaders = split_string(readHeaders, splitHeadersString);
+
+		// for each response header.
+		for (auto& header : resultHeaders)
+		{
+			// split the response headers key-value.
+			std::vector<std::string> headerKeyValue = split_string(header, splitKeyValuesString);
+
+			// if header status code
+			if (headerKeyValue.size() == 1 && headerKeyValue[0].size() > 0)
+			{
+				std::string headerName(both_trim(headerKeyValue[0].c_str(), trimString.c_str()));
+				*responseStatus = headerName;
+			}
+
+			// if header key and value
+			if (headerKeyValue.size() > 1)
+			{
+				std::string headerName(headerKeyValue[0]);
+				std::string headerValue(both_trim(headerKeyValue[1].c_str(), trimString.c_str()));
+
+				// add header.
+				responseHeaders->insert({ headerName, headerValue });
+			}
+		}
+	}
+	else
+	{
+		result = false;
+	}
+
+	// return
+	return result;
+}
+
+/// <summary>
+/// make get request.
+/// </summary>
+/// <param name="url">the URL</param>
 /// <param name="requestHeaders">the request headers</param>
 /// <param name="responseBody">The response body</param>
 /// <param name="responseHeaders">The response headers</param>
@@ -632,6 +750,140 @@ bool CurlClient::Get(const std::string& url, const std::map<std::string, std::st
 		// assign result.
 		*responseBody = readBuffer;
 		*responseHeaders = readHeaders;
+	}
+	else
+	{
+		result = false;
+	}
+
+	// return
+	return result;
+}
+
+/// <summary>
+/// make get request.
+/// </summary>
+/// <param name="url">the URL</param>
+/// <param name="requestHeaders">the request headers</param>
+/// <param name="responseBody">The response body</param>
+/// <param name="responseStatus">The response status</param>
+/// <param name="responseHeaders">The response headers</param>
+/// <returns>true if success: else false</returns>
+bool CurlClient::Get(const std::string& url, const std::map<std::string, std::string>& requestHeaders,
+	std::string* responseBody, std::string* responseStatus, std::map<std::string, std::string>* responseHeaders) const
+{
+	bool result = false;
+	CURL* curl;
+	CURLcode res;
+	std::string readBuffer;
+	std::string readHeaders;
+
+	// the url
+	auto const& url_request = url;
+	struct curl_slist* headers = NULL;
+
+	curl = curl_easy_init();
+	if (curl) {
+
+		// add curl options
+		curl_easy_setopt(curl, CURLOPT_URL, url_request.c_str());
+		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+		curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, WriteHeaderCallback);
+		curl_easy_setopt(curl, CURLOPT_WRITEHEADER, &readHeaders);
+		curl_easy_setopt(curl, CURLOPT_HTTP_VERSION, (long)CURL_HTTP_VERSION_2TLS);
+
+		// 1L to verify 0L to not verify.
+		// Set if we should verify the peer in ssl handshake, set 1 to verify.
+		if (_verify_peer)
+		{
+			curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 1L);
+		}
+		else
+		{
+			curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
+		}
+
+		// 1L to verify 0L to not verify.
+		// Set if we should verify the Common name from the peer certificate in ssl
+		// handshake, set 1 to check existence, 2 to ensure that it matches the
+		// provided hostname.
+		if (_verify_common_name)
+		{
+			curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 2L);
+		}
+		else if (_check_existence)
+		{
+			curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 1L);
+		}
+		else
+		{
+			curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
+		}
+
+		// for each request header.
+		for (const auto& header : requestHeaders)
+		{
+			// create header name and value.
+			std::string headerName(header.first);
+			std::string headerValue(header.second);
+			std::string header_v = headerName + headerValue;
+
+			// add the header to the header list
+			headers = curl_slist_append(headers, header_v.c_str());
+		}
+
+		// add the headers
+		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+
+		// make the request.
+		res = curl_easy_perform(curl);
+		if (res != CURLE_OK)
+		{
+			result = false;
+		}
+		else
+		{
+			result = true;
+		}
+
+		// clean up
+		curl_slist_free_all(headers);
+		curl_easy_cleanup(curl);
+
+		// assign result.
+		*responseBody = readBuffer;
+
+		std::string trimString(" ");
+		std::string splitHeadersString("\r\n");
+		std::string splitKeyValuesString(": ");
+
+		// split the response headers.
+		std::vector<std::string> resultHeaders = split_string(readHeaders, splitHeadersString);
+
+		// for each response header.
+		for (auto& header : resultHeaders)
+		{
+			// split the response headers key-value.
+			std::vector<std::string> headerKeyValue = split_string(header, splitKeyValuesString);
+
+			// if header status code
+			if (headerKeyValue.size() == 1 && headerKeyValue[0].size() > 0)
+			{
+				std::string headerName(both_trim(headerKeyValue[0].c_str(), trimString.c_str()));
+				*responseStatus = headerName;
+			}
+
+			// if header key and value
+			if (headerKeyValue.size() > 1)
+			{
+				std::string headerName(headerKeyValue[0]);
+				std::string headerValue(both_trim(headerKeyValue[1].c_str(), trimString.c_str()));
+
+				// add header.
+				responseHeaders->insert({ headerName, headerValue });
+			}
+		}
 	}
 	else
 	{
@@ -739,6 +991,144 @@ bool CurlClient::Post(const std::string& url, const std::string& requestBody, co
 		// assign result.
 		*responseBody = readBuffer;
 		*responseHeaders = readHeaders;
+	}
+	else
+	{
+		result = false;
+	}
+
+	// return
+	return result;
+}
+
+/// <summary>
+/// make post request
+/// </summary>
+/// <param name="url">the URL</param>
+/// <param name="requestBody">The request body</param>
+/// <param name="requestContentType">The request content type</param>
+/// <param name="responseBody">The response body</param>
+/// <param name="responseStatus">The response status</param>
+/// <param name="responseHeaders">The response headers</param>
+/// <returns>true if success: else false</returns>
+bool CurlClient::Post(const std::string& url, const std::string& requestBody, const std::string& requestContentType,
+	std::string* responseBody, std::string* responseStatus, std::map<std::string, std::string>* responseHeaders) const
+{
+	bool result = false;
+	CURL* curl;
+	CURLcode res;
+	std::string readBuffer;
+	std::string readHeaders;
+
+	// the url
+	auto const& url_request = url;
+	struct curl_slist* headers = NULL;
+
+	auto& body_request = requestBody;
+	std::string body_content_type = "Content-Type: " + requestContentType;
+
+	curl = curl_easy_init();
+	if (curl) {
+
+		// add curl options
+		curl_easy_setopt(curl, CURLOPT_URL, url_request.c_str());
+		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+		curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, WriteHeaderCallback);
+		curl_easy_setopt(curl, CURLOPT_WRITEHEADER, &readHeaders);
+		curl_easy_setopt(curl, CURLOPT_HTTP_VERSION, (long)CURL_HTTP_VERSION_2TLS);
+
+		// 1L to verify 0L to not verify.
+		// Set if we should verify the peer in ssl handshake, set 1 to verify.
+		if (_verify_peer)
+		{
+			curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 1L);
+		}
+		else
+		{
+			curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
+		}
+
+		// 1L to verify 0L to not verify.
+		// Set if we should verify the Common name from the peer certificate in ssl
+		// handshake, set 1 to check existence, 2 to ensure that it matches the
+		// provided hostname.
+		if (_verify_common_name)
+		{
+			curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 2L);
+		}
+		else if (_check_existence)
+		{
+			curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 1L);
+		}
+		else
+		{
+			curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
+		}
+
+		// post
+		std::string post(body_request);
+		std::string postLength = std::to_string(post.size());
+		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, body_request.c_str());
+
+		std::string contentTypeNme("Content-Type: ");
+		std::string contentTypeArg(requestContentType);
+		body_content_type = contentTypeNme + contentTypeArg;
+
+		std::string contentLength = "Content-Length: " + postLength;
+		std::string contentType = body_content_type;
+		headers = curl_slist_append(headers, contentType.c_str());
+		headers = curl_slist_append(headers, contentLength.c_str());
+		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+
+		// make the request.
+		res = curl_easy_perform(curl);
+		if (res != CURLE_OK)
+		{
+			result = false;
+		}
+		else
+		{
+			result = true;
+		}
+
+		// clean up
+		curl_slist_free_all(headers);
+		curl_easy_cleanup(curl);
+
+		// assign result.
+		*responseBody = readBuffer;
+
+		std::string trimString(" ");
+		std::string splitHeadersString("\r\n");
+		std::string splitKeyValuesString(": ");
+
+		// split the response headers.
+		std::vector<std::string> resultHeaders = split_string(readHeaders, splitHeadersString);
+
+		// for each response header.
+		for (auto& header : resultHeaders)
+		{
+			// split the response headers key-value.
+			std::vector<std::string> headerKeyValue = split_string(header, splitKeyValuesString);
+
+			// if header status code
+			if (headerKeyValue.size() == 1 && headerKeyValue[0].size() > 0)
+			{
+				std::string headerName(both_trim(headerKeyValue[0].c_str(), trimString.c_str()));
+				*responseStatus = headerName;
+			}
+
+			// if header key and value
+			if (headerKeyValue.size() > 1)
+			{
+				std::string headerName(headerKeyValue[0]);
+				std::string headerValue(both_trim(headerKeyValue[1].c_str(), trimString.c_str()));
+
+				// add header.
+				responseHeaders->insert({ headerName, headerValue });
+			}
+		}
 	}
 	else
 	{
@@ -859,6 +1249,158 @@ bool CurlClient::Post(const std::string& url, const std::string& requestBody, co
 		// assign result.
 		*responseBody = readBuffer;
 		*responseHeaders = readHeaders;
+	}
+	else
+	{
+		result = false;
+	}
+
+	// return
+	return result;
+}
+
+/// <summary>
+/// make post request
+/// </summary>
+/// <param name="url">the URL</param>
+/// <param name="requestBody">The request body</param>
+/// <param name="requestContentType">The request content type</param>
+/// <param name="requestHeaders">the request headers</param>
+/// <param name="responseBody">The response body</param>
+/// <param name="responseStatus">The response status</param>
+/// <param name="responseHeaders">The response headers</param>
+/// <returns>true if success: else false</returns>
+bool CurlClient::Post(const std::string& url, const std::string& requestBody, const std::string& requestContentType,
+	const std::map<std::string, std::string>& requestHeaders, std::string* responseBody,
+	std::string* responseStatus, std::map<std::string, std::string>* responseHeaders) const
+{
+	bool result = false;
+	CURL* curl;
+	CURLcode res;
+	std::string readBuffer;
+	std::string readHeaders;
+
+	// the url
+	auto const& url_request = url;
+	struct curl_slist* headers = NULL;
+
+	auto& body_request = requestBody;
+	std::string body_content_type = "Content-Type: " + requestContentType;
+
+	curl = curl_easy_init();
+	if (curl) {
+
+		// add curl options
+		curl_easy_setopt(curl, CURLOPT_URL, url_request.c_str());
+		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+		curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, WriteHeaderCallback);
+		curl_easy_setopt(curl, CURLOPT_WRITEHEADER, &readHeaders);
+		curl_easy_setopt(curl, CURLOPT_HTTP_VERSION, (long)CURL_HTTP_VERSION_2TLS);
+
+		// 1L to verify 0L to not verify.
+		// Set if we should verify the peer in ssl handshake, set 1 to verify.
+		if (_verify_peer)
+		{
+			curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 1L);
+		}
+		else
+		{
+			curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
+		}
+
+		// 1L to verify 0L to not verify.
+		// Set if we should verify the Common name from the peer certificate in ssl
+		// handshake, set 1 to check existence, 2 to ensure that it matches the
+		// provided hostname.
+		if (_verify_common_name)
+		{
+			curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 2L);
+		}
+		else if (_check_existence)
+		{
+			curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 1L);
+		}
+		else
+		{
+			curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
+		}
+
+		// post
+		std::string post(body_request);
+		std::string postLength = std::to_string(post.size());
+		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, body_request.c_str());
+
+		// for each request header.
+		for (const auto& header : requestHeaders)
+		{
+			// create header name and value.
+			std::string headerName(header.first);
+			std::string headerValue(header.second);
+			std::string header_v = headerName + headerValue;
+
+			// add the header to the header list
+			headers = curl_slist_append(headers, header_v.c_str());
+		}
+
+		std::string contentTypeNme("Content-Type: ");
+		std::string contentTypeArg(requestContentType);
+		body_content_type = contentTypeNme + contentTypeArg;
+
+		std::string contentLength = "Content-Length: " + postLength;
+		std::string contentType = body_content_type;
+		headers = curl_slist_append(headers, contentType.c_str());
+		headers = curl_slist_append(headers, contentLength.c_str());
+		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+
+		// make the request.
+		res = curl_easy_perform(curl);
+		if (res != CURLE_OK)
+		{
+			result = false;
+		}
+		else
+		{
+			result = true;
+		}
+
+		// clean up
+		curl_slist_free_all(headers);
+		curl_easy_cleanup(curl);
+
+		// assign result.
+		*responseBody = readBuffer;
+
+		std::string trimString(" ");
+		std::string splitHeadersString("\r\n");
+		std::string splitKeyValuesString(": ");
+
+		// split the response headers.
+		std::vector<std::string> resultHeaders = split_string(readHeaders, splitHeadersString);
+
+		// for each response header.
+		for (auto& header : resultHeaders)
+		{
+			// split the response headers key-value.
+			std::vector<std::string> headerKeyValue = split_string(header, splitKeyValuesString);
+
+			// if header status code
+			if (headerKeyValue.size() == 1 && headerKeyValue[0].size() > 0)
+			{
+				std::string headerName(both_trim(headerKeyValue[0].c_str(), trimString.c_str()));
+				*responseStatus = headerName;
+			}
+
+			// if header key and value
+			if (headerKeyValue.size() > 1)
+			{
+				std::string headerName(headerKeyValue[0]);
+				std::string headerValue(both_trim(headerKeyValue[1].c_str(), trimString.c_str()));
+
+				// add header.
+				responseHeaders->insert({ headerName, headerValue });
+			}
+		}
 	}
 	else
 	{

@@ -95,6 +95,17 @@ namespace Nequeo {
 			/// make get request.
 			/// </summary>
 			/// <param name="url">the URL</param>
+			/// <param name="responseBody">The response body</param>
+			/// <param name="responseStatus">The response status</param>
+			/// <param name="responseHeaders">The response headers</param>
+			/// <returns>true if success: else false</returns>
+			bool Get(const std::string& url, std::string* responseBody, std::string* responseStatus,
+				std::map<std::string, std::string>* responseHeaders) const;
+
+			/// <summary>
+			/// make get request.
+			/// </summary>
+			/// <param name="url">the URL</param>
 			/// <param name="requestHeaders">the request headers</param>
 			/// <param name="responseBody">The response body</param>
 			/// <param name="responseHeaders">The response headers</param>
@@ -104,6 +115,22 @@ namespace Nequeo {
 			///			map:	'Authorization: ', 'Bearer: token'
 			/// </example>
 			bool Get(const std::string& url, const std::map<std::string, std::string>& requestHeaders, std::string* responseBody, std::string* responseHeaders) const;
+
+			/// <summary>
+			/// make get request.
+			/// </summary>
+			/// <param name="url">the URL</param>
+			/// <param name="requestHeaders">the request headers</param>
+			/// <param name="responseBody">The response body</param>
+			/// <param name="responseStatus">The response status</param>
+			/// <param name="responseHeaders">The response headers</param>
+			/// <returns>true if success: else false</returns>
+			/// <example>
+			///		request headers:
+			///			map:	'Authorization: ', 'Bearer: token'
+			/// </example>
+			bool Get(const std::string& url, const std::map<std::string, std::string>& requestHeaders,
+				std::string* responseBody, std::string* responseStatus, std::map<std::string, std::string>* responseHeaders) const;
 
 			/// <summary>
 			/// make post request
@@ -123,6 +150,19 @@ namespace Nequeo {
 			/// <param name="url">the URL</param>
 			/// <param name="requestBody">The request body</param>
 			/// <param name="requestContentType">The request content type</param>
+			/// <param name="responseBody">The response body</param>
+			/// <param name="responseStatus">The response status</param>
+			/// <param name="responseHeaders">The response headers</param>
+			/// <returns>true if success: else false</returns>
+			bool Post(const std::string& url, const std::string& requestBody, const std::string& requestContentType,
+				std::string* responseBody, std::string* responseStatus, std::map<std::string, std::string>* responseHeaders) const;
+
+			/// <summary>
+			/// make post request
+			/// </summary>
+			/// <param name="url">the URL</param>
+			/// <param name="requestBody">The request body</param>
+			/// <param name="requestContentType">The request content type</param>
 			/// <param name="requestHeaders">the request headers</param>
 			/// <param name="responseBody">The response body</param>
 			/// <param name="responseHeaders">The response headers</param>
@@ -133,6 +173,25 @@ namespace Nequeo {
 			/// </example>
 			bool Post(const std::string& url, const std::string& requestBody, const std::string& requestContentType,
 				const std::map<std::string, std::string>& requestHeaders, std::string* responseBody, std::string* responseHeaders) const;
+
+			/// <summary>
+			/// make post request
+			/// </summary>
+			/// <param name="url">the URL</param>
+			/// <param name="requestBody">The request body</param>
+			/// <param name="requestContentType">The request content type</param>
+			/// <param name="requestHeaders">the request headers</param>
+			/// <param name="responseBody">The response body</param>
+			/// <param name="responseStatus">The response status</param>
+			/// <param name="responseHeaders">The response headers</param>
+			/// <returns>true if success: else false</returns>
+			/// <example>
+			///		request headers:
+			///			map:	'Authorization: ', 'Bearer: token'
+			/// </example>
+			bool Post(const std::string& url, const std::string& requestBody, const std::string& requestContentType,
+				const std::map<std::string, std::string>& requestHeaders, std::string* responseBody,
+				std::string* responseStatus, std::map<std::string, std::string>* responseHeaders) const;
 
 			/// <summary>
 			/// make put request.

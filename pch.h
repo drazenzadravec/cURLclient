@@ -10,5 +10,6 @@
 #include <stdio.h>
 #include <string>
 #include <map>
+#include <vector>
 
 #endif //PCH_H
