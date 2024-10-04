@@ -230,8 +230,9 @@ bool CurlClient::Options(const std::string& url, const std::map<std::string, std
 		{
 			// create header name and value.
 			std::string headerName(header.first);
+			std::string headerCenter(": ");
 			std::string headerValue(header.second);
-			std::string header_v = headerName + headerValue;
+			std::string header_v = headerName + headerCenter + headerValue;
 
 			// add the header to the header list
 			headers = curl_slist_append(headers, header_v.c_str());
@@ -417,8 +418,9 @@ bool CurlClient::Head(const std::string& url, const std::map<std::string, std::s
 		{
 			// create header name and value.
 			std::string headerName(header.first);
+			std::string headerCenter(": ");
 			std::string headerValue(header.second);
-			std::string header_v = headerName + headerValue;
+			std::string header_v = headerName + headerCenter + headerValue;
 
 			// add the header to the header list
 			headers = curl_slist_append(headers, header_v.c_str());
@@ -722,8 +724,9 @@ bool CurlClient::Get(const std::string& url, const std::map<std::string, std::st
 		{
 			// create header name and value.
 			std::string headerName(header.first);
+			std::string headerCenter(": ");
 			std::string headerValue(header.second);
-			std::string header_v = headerName + headerValue;
+			std::string header_v = headerName + headerCenter + headerValue;
 
 			// add the header to the header list
 			headers = curl_slist_append(headers, header_v.c_str());
@@ -826,8 +829,9 @@ bool CurlClient::Get(const std::string& url, const std::map<std::string, std::st
 		{
 			// create header name and value.
 			std::string headerName(header.first);
+			std::string headerCenter(": ");
 			std::string headerValue(header.second);
-			std::string header_v = headerName + headerValue;
+			std::string header_v = headerName + headerCenter + headerValue;
 
 			// add the header to the header list
 			headers = curl_slist_append(headers, header_v.c_str());
@@ -1214,8 +1218,9 @@ bool CurlClient::Post(const std::string& url, const std::string& requestBody, co
 		{
 			// create header name and value.
 			std::string headerName(header.first);
+			std::string headerCenter(": ");
 			std::string headerValue(header.second);
-			std::string header_v = headerName + headerValue;
+			std::string header_v = headerName + headerCenter + headerValue;
 
 			// add the header to the header list
 			headers = curl_slist_append(headers, header_v.c_str());
@@ -1336,8 +1341,9 @@ bool CurlClient::Post(const std::string& url, const std::string& requestBody, co
 		{
 			// create header name and value.
 			std::string headerName(header.first);
+			std::string headerCenter(": ");
 			std::string headerValue(header.second);
-			std::string header_v = headerName + headerValue;
+			std::string header_v = headerName + headerCenter + headerValue;
 
 			// add the header to the header list
 			headers = curl_slist_append(headers, header_v.c_str());
@@ -1565,8 +1571,9 @@ bool CurlClient::Put(const std::string& url, const std::map<std::string,
 		{
 			// create header name and value.
 			std::string headerName(header.first);
+			std::string headerCenter(": ");
 			std::string headerValue(header.second);
-			std::string header_v = headerName + headerValue;
+			std::string header_v = headerName + headerCenter + headerValue;
 
 			// add the header to the header list
 			headers = curl_slist_append(headers, header_v.c_str());
@@ -1787,8 +1794,9 @@ bool CurlClient::Put(const std::string& url, const std::string& requestBody, con
 		{
 			// create header name and value.
 			std::string headerName(header.first);
+			std::string headerCenter(": ");
 			std::string headerValue(header.second);
-			std::string header_v = headerName + headerValue;
+			std::string header_v = headerName + headerCenter + headerValue;
 
 			// add the header to the header list
 			headers = curl_slist_append(headers, header_v.c_str());
@@ -1986,8 +1994,9 @@ bool CurlClient::Delete(const std::string& url, const std::map<std::string,
 		{
 			// create header name and value.
 			std::string headerName(header.first);
+			std::string headerCenter(": ");
 			std::string headerValue(header.second);
-			std::string header_v = headerName + headerValue;
+			std::string header_v = headerName + headerCenter + headerValue;
 
 			// add the header to the header list
 			headers = curl_slist_append(headers, header_v.c_str());
@@ -2208,8 +2217,9 @@ bool CurlClient::Delete(const std::string& url, const std::string& requestBody, 
 		{
 			// create header name and value.
 			std::string headerName(header.first);
+			std::string headerCenter(": ");
 			std::string headerValue(header.second);
-			std::string header_v = headerName + headerValue;
+			std::string header_v = headerName + headerCenter + headerValue;
 
 			// add the header to the header list
 			headers = curl_slist_append(headers, header_v.c_str());
@@ -2407,8 +2417,9 @@ bool CurlClient::Patch(const std::string& url, const std::map<std::string, std::
 		{
 			// create header name and value.
 			std::string headerName(header.first);
+			std::string headerCenter(": ");
 			std::string headerValue(header.second);
-			std::string header_v = headerName + headerValue;
+			std::string header_v = headerName + headerCenter + headerValue;
 
 			// add the header to the header list
 			headers = curl_slist_append(headers, header_v.c_str());
@@ -2629,8 +2640,9 @@ bool CurlClient::Patch(const std::string& url, const std::string& requestBody, c
 		{
 			// create header name and value.
 			std::string headerName(header.first);
+			std::string headerCenter(": ");
 			std::string headerValue(header.second);
-			std::string header_v = headerName + headerValue;
+			std::string header_v = headerName + headerCenter + headerValue;
 
 			// add the header to the header list
 			headers = curl_slist_append(headers, header_v.c_str());
